@@ -50,7 +50,7 @@ public:
 
     bool InitCenters(std::shared_ptr<Data<float>>& centers);
 
-    void Cluster(std::shared_ptr<Data<float>> &labels, std::shared_ptr<Data<float>>& centers);
+    void Cluster(std::shared_ptr<Data<int>> &labels, std::shared_ptr<Data<float>>& centers);
 
 private:
     std::shared_ptr<Data<float>> data_;
