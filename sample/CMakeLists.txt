@@ -1,0 +1,2 @@
+add_subdirectory(mathFunctionTest)
+add_subdirectory(filestorageTest)

@@ -3,40 +3,45 @@
 //
 #include <kmeans.h>
 #include <iostream>
-//#include <cublas_v2.h>
-//#include <cuda_runtime.h>
+#include <cublas_v2.h>
+#include <cuda_runtime.h>
 #include <memory>
 #include <random>
 #include <string.h>
-
-#define IDX2C(i,j,ld) (((i)*(ld))+(j))
+#include <mathFunction.h>
 
 using namespace std;
 
-Kmeans::Kmeans(const Data<double> &data, int k, const Kmeans::TermCriteria &term_criteria,
-               Kmeans::TYPE flag) {
-    data_ = data;
-    k_ = k;
-    term_criteria_ = term_criteria;
-    flag_ = flag;
+Kmeans::Kmeans(const shared_ptr<Data<double>> &data, int k, const Kmeans::TermCriteria &term_criteria,
+               Kmeans::TYPE flag):data_(data),k_(k),term_criteria_(term_criteria),flag_(flag) {
+//    cudaError_t cuda_stat;
+//
+//    cuda_stat = cudaMalloc((void**)&dev_data_, data->rows*data->cols*sizeof(double));
+//    if (cuda_stat != cudaSuccess) {
+//        cerr<<"device memory allocation failed"<<endl;
+//        exit(0);
+//    }
+//
+//    cuda_stat = cudaMemcpy(dev_data_, data->data, data->rows*data->cols* sizeof(double), cudaMemcpyHostToDevice);
+//    if(cuda_stat!=cudaSuccess) {
+//        cudaFree(dev_data_);
+//        cerr<<"data download failed"<<endl;
+//        exit(0);
+//    }
 }
 
-bool Kmeans::InitCenters(Data<double> &centers) {
+bool Kmeans::InitCenters(shared_ptr<Data<double>> &centers) {
+    memcpy(centers->data, data_->data, data_->cols*sizeof(double));
 
-    memcpy(centers.data, data_.data, centers.cols* sizeof(double));
-
+    double *distances = new double[data_->rows*k_];
+    for(int i=1; i<k_; ++i){
+        Math::Dgemm(data_->rows,data_->cols,i,data_->data, centers->data,distances);
+    }
     return true;
 
 }
 
-void shared_test(shared_ptr<double> a) {
-
-}
-
-void Kmeans::Cluster(Data<double> &labels, Data<double> &centers) {
-    labels = Data<double>(data_.rows,2);
-    centers = Data<double>(k_,data_.cols);
-
+void Kmeans::Cluster(shared_ptr<Data<double>> &labels, shared_ptr<Data<double>> &centers) {
     if(!InitCenters(centers)) {
         cerr << "init centers failed"<<endl;
     }

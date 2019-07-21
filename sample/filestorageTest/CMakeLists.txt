@@ -1,0 +1,2 @@
+add_executable(filestorageTest main.cpp)
+target_link_libraries(filestorageTest opencv_core opencv_highgui)
