@@ -39,17 +39,14 @@ bool Kmeans::InitCenters(shared_ptr<Data<float>> &centers) {
         cv::Mat im_distance(data_->rows,i,CV_32FC1,distances);
 
         float tmp[data_->rows];
-        for(int j=0; j<im_distance.rows; ++j) {
-            float min_distance = im_distance.at<float>(j,0);
 
-            for(int k=1; k<im_distance.cols; ++k) {
-                if(min_distance>im_distance.at<float>(j,k)) {
-                   min_distance = im_distance.at<float>(j,k);
-                }
-            }
+        cv::Mat tmp_distance;
+        cv::reduce(im_distance,tmp_distance,1,cv::REDUCE_MAX);
+        memcpy(tmp,tmp_distance.data,data_->rows* sizeof(float));
 
-            tmp[j] = 1 - min_distance;
-            if (j) {
+        for(int j=0; j<data_->rows; ++j) {
+            tmp[j] = 1-tmp[j];
+            if(j) {
                 tmp[j] += tmp[j-1];
             }
         }
