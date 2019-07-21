@@ -15,5 +15,14 @@ int main() {
     fs << "height"<<15;
     fs << "im"<<im;
     fs.release();
+
+    json_path = "./features1.json.gz";
+    cv::FileStorage fs1(json_path, cv::FileStorage::READ);
+    cv::Mat features;
+    fs1["features"]>>features;
+
+    return 0;
+
+
 }
 

@@ -1,2 +1,3 @@
 add_subdirectory(mathFunctionTest)
 add_subdirectory(filestorageTest)
+add_subdirectory(kmeans)

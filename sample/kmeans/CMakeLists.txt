@@ -1,0 +1,2 @@
+add_executable(app_kmeans main.cpp)
+target_link_libraries(app_kmeans kmeans opencv_highgui)

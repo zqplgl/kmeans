@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Kmeans::Kmeans(const shared_ptr<Data<double>> &data, int k, const Kmeans::TermCriteria &term_criteria,
+Kmeans::Kmeans(const shared_ptr<Data<float>> &data, int k, const Kmeans::TermCriteria &term_criteria,
                Kmeans::TYPE flag):data_(data),k_(k),term_criteria_(term_criteria),flag_(flag) {
 //    cudaError_t cuda_stat;
 //
@@ -30,25 +30,20 @@ Kmeans::Kmeans(const shared_ptr<Data<double>> &data, int k, const Kmeans::TermCr
 //    }
 }
 
-bool Kmeans::InitCenters(shared_ptr<Data<double>> &centers) {
-    memcpy(centers->data, data_->data, data_->cols*sizeof(double));
+bool Kmeans::InitCenters(shared_ptr<Data<float>> &centers) {
+    memcpy(centers->data, data_->data, data_->cols*sizeof(float));
 
-    double *distances = new double[data_->rows*k_];
+    float *distances = new float[data_->rows*k_];
     for(int i=1; i<k_; ++i){
-        Math::Dgemm(data_->rows,data_->cols,i,data_->data, centers->data,distances);
+        Math::Sgemm(data_->rows,data_->cols,i,data_->data, centers->data,distances);
     }
     return true;
 
 }
 
-void Kmeans::Cluster(shared_ptr<Data<double>> &labels, shared_ptr<Data<double>> &centers) {
+void Kmeans::Cluster(shared_ptr<Data<float>> &labels, shared_ptr<Data<float>> &centers) {
     if(!InitCenters(centers)) {
         cerr << "init centers failed"<<endl;
     }
 
-}
-
-int main(){
-    cout<<"hello world"<<endl;
-    return 0;
 }

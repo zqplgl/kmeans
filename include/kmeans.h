@@ -29,6 +29,7 @@ public:
     T *data= nullptr;
 
 };
+
 class Kmeans {
 public:
     struct TermCriteria {
@@ -45,14 +46,14 @@ public:
         KMEANS_RANDOM_CENTERS = 1,
     };
 
-    Kmeans(const std::shared_ptr<Data<double>> &data, int k, const Kmeans::TermCriteria &term_criteria, Kmeans::TYPE flag);
+    Kmeans(const std::shared_ptr<Data<float>> &data, int k, const Kmeans::TermCriteria &term_criteria, Kmeans::TYPE flag);
 
-    bool InitCenters(std::shared_ptr<Data<double>>& centers);
+    bool InitCenters(std::shared_ptr<Data<float>>& centers);
 
-    void Cluster(std::shared_ptr<Data<double>> &labels, std::shared_ptr<Data<double>>& centers);
+    void Cluster(std::shared_ptr<Data<float>> &labels, std::shared_ptr<Data<float>>& centers);
 
 private:
-    std::shared_ptr<Data<double>> data_;
+    std::shared_ptr<Data<float>> data_;
     int k_;
     double *dev_data_;
     Kmeans::TermCriteria term_criteria_;
